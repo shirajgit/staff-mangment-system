@@ -7,7 +7,10 @@ export async function GET() {
   const auth = await getAuthUser();
 
   if (!auth || auth.role !== "admin") {
-    return NextResponse.json({ ok: false, message: "Forbidden" }, { status: 403 });
+    return NextResponse.json(
+      { ok: false, message: "Forbidden" },
+      { status: 403 }
+    );
   }
 
   await connectDB();
@@ -16,9 +19,12 @@ export async function GET() {
 
   const list = await Attendance.find({ date: today })
     .sort({ createdAt: -1 })
-    .select("staffName checkIn distanceMeters");
+    // ✅ If you store name directly
+    .select("staffName checkIn distanceMeters date");
 
-  const name = list.staffId  
+    // OR (better) if you use populate:
+    // .populate("staffId", "name email")
+    // .select("staffId checkIn distanceMeters date");
 
   return NextResponse.json({ ok: true, list });
 }

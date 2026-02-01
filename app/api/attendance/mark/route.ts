@@ -6,7 +6,7 @@ import { haversineMeters } from "@/utils/distance";
 import { getAuthUser } from "@/lib/auth";
 import User from "@/models/User";
 
-export async function POST(req) {
+export async function POST(req : Request) {
   const auth = await getAuthUser();
   if (!auth) {
     return NextResponse.json({ ok: false, message: "Not logged in" }, { status: 401 });

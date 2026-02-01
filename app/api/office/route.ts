@@ -9,7 +9,7 @@ export async function GET() {
   return NextResponse.json({ ok: true, office });
 }
 
-export async function POST(req) {
+export async function POST(req : Request) {
   // ✅ admin check
   const auth = await getAuthUser();
   if (!auth || auth.role !== "admin") {

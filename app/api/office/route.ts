@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Office from "@/models/Office";
+import { getAuthUser } from "@/lib/auth";
 
 export async function GET() {
   await connectDB();
@@ -8,20 +9,30 @@ export async function GET() {
   return NextResponse.json({ ok: true, office });
 }
 
-export async function POST(req: Request) {
+export async function POST(req) {
+  // ✅ admin check
+  const auth = await getAuthUser();
+  if (!auth || auth.role !== "admin") {
+    return NextResponse.json({ ok: false, message: "Forbidden" }, { status: 403 });
+  }
+
   await connectDB();
-  const { lat, lng, radiusMeters } = await req.json();
+  const body = await req.json().catch(() => null);
 
-  const _lat = Number(lat);
-  const _lng = Number(lng);
-  const _rad = Number(radiusMeters ?? 150);
+  if (!body) {
+    return NextResponse.json({ ok: false, message: "Invalid JSON body" }, { status: 400 });
+  }
 
-  if (!Number.isFinite(_lat) || !Number.isFinite(_lng)) {
+  const lat = Number(body.lat);
+  const lng = Number(body.lng);
+  const radiusMeters = Number(body.radiusMeters ?? 150);
+
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
     return NextResponse.json({ ok: false, message: "Invalid lat/lng" }, { status: 400 });
   }
 
   await Office.deleteMany({});
-  const office = await Office.create({ lat: _lat, lng: _lng, radiusMeters: _rad });
+  const office = await Office.create({ lat, lng, radiusMeters });
 
   return NextResponse.json({ ok: true, message: "Office saved ✅", office });
 }

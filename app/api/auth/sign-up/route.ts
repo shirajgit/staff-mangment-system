@@ -4,7 +4,7 @@ import { connectDB } from "@/lib/db";
 import { signToken } from "@/lib/auth";
 import User from "@/models/User";
 
-export async function POST(req) {
+export async function POST(req :any) {
   try {
     await connectDB();
 
@@ -66,7 +66,7 @@ export async function POST(req) {
     return res;
   } catch (err) {
     return NextResponse.json(
-      { ok: false, message: err?.message || "Server error" },
+      { ok: false, message: (err as Error)?.message || "Server error" },
       { status: 500 }
     );
   }

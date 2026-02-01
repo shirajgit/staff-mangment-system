@@ -18,5 +18,7 @@ export async function GET() {
     .sort({ createdAt: -1 })
     .select("staffName checkIn distanceMeters");
 
+  const name = list.staffId  
+
   return NextResponse.json({ ok: true, list });
 }

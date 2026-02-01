@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
 
-export function middleware(req) {
+export function middleware(req : NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Only protect admin routes
@@ -20,7 +20,7 @@ export function middleware(req) {
   }
 
   try {
-    const decoded = jwt.verify(token, secret);
+    const decoded = jwt.verify(token, secret) as { role: string };
 
     // Allow only admin
     if (decoded.role !== "admin") {

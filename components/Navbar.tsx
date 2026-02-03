@@ -17,9 +17,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
-  const isActive = (href: string) => {
-    if (href.startsWith("/admin")) return pathname.startsWith("/admin");
-    if (href.startsWith("/staff")) return pathname.startsWith("/staff");
+  const isActive = (href: string) => {  
     return pathname === href;
   };
 

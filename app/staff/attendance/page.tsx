@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { getCurrentLocation } from "@/utils/geo";
 import Link from "next/link";

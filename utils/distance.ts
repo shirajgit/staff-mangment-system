@@ -7,7 +7,7 @@ export function haversineMeters(
   lat2: number,
   lng2: number
 ): number {
-  const R = 6371000; // Earth radius in meters
+  const R = 6371000;  
   const toRad = (deg: number) => (deg * Math.PI) / 180;
 
   const dLat = toRad(lat2 - lat1);
